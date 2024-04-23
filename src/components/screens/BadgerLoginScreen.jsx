@@ -1,13 +1,36 @@
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 
 function BadgerLoginScreen(props) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
     return <View style={styles.container}>
-        <Text style={{ fontSize: 36 }}>BadgerChat Login</Text>
-        <Text>Hmmm... I should add inputs here!</Text>
+        <Text style={{ fontSize: 36, marginBottom: 20 }}>BadgerChat Login</Text>
+
+        <Text>Username</Text>
+        <TextInput
+            style={styles.input}
+            autoCapitalize="none"
+            value={username}
+            onChangeText={setUsername}
+        />
+
+        <Text>Password</Text>
+        <TextInput
+            style={styles.input}
+            autoCapitalize="none"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+        />
+
+        {props.showLoginError && <Text style={{color:"red", marginBottom:12}}>Incorrect login, please try again.</Text>}
+
         <Button color="crimson" title="Login" onPress={() => {
-            Alert.alert("Hmmm...", "I should check the user's credentials!");
-            props.handleLogin("myusername", "mypassword")
+            props.handleLogin(username, password);
         }} />
+        <Text style={{margin:20}}>New here?</Text>
         <Button color="grey" title="Signup" onPress={() => props.setIsRegistering(true)} />
     </View>;
 }
@@ -18,6 +41,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    input: {
+        height: 40,
+        width: 200,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
     }
 });
 

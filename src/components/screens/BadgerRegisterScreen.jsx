@@ -1,11 +1,47 @@
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 
 function BadgerRegisterScreen(props) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
+
     return <View style={styles.container}>
-        <Text style={{ fontSize: 36 }}>Join BadgerChat!</Text>
-        <Text>Hmmm... I should add inputs here!</Text>
-        <Button color="crimson" title="Signup" onPress={() => Alert.alert("Hmmm...", "This should do something!")} />
-        <Button color="grey" title="Nevermind!" onPress={() => props.setIsRegistering(false)} />
+        <Text style={{ fontSize: 36, marginBottom: 20 }}>Join BadgerChat!</Text>
+
+        <Text>Username</Text>
+        <TextInput
+            style={styles.input}
+            autoCapitalize="none"
+            value={username}
+            onChangeText={setUsername}
+        />
+
+        <Text>Password</Text>
+        <TextInput
+            style={styles.input}
+            autoCapitalize="none"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+        />
+
+        <Text>Confirm Password</Text>
+        <TextInput
+            style={styles.input}
+            autoCapitalize="none"
+            secureTextEntry
+            value={repeatPassword}
+            onChangeText={setRepeatPassword}
+        />
+        
+        {props.showRegisterError && <Text style={{color:"red", marginBottom:12}}>{props.registerError}</Text>}
+
+        <View style={{flexDirection:"row"}}>
+            <Button color="crimson" title="Signup" onPress={() => props.handleSignup(username, password, repeatPassword)} />
+            <Text> </Text>
+            <Button color="grey" title="Nevermind!" onPress={() => props.setIsRegistering(false)} />
+        </View>
     </View>;
 }
 
@@ -15,7 +51,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
+    input: {
+        height: 40,
+        width: 200,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+    },
 });
 
 export default BadgerRegisterScreen;
