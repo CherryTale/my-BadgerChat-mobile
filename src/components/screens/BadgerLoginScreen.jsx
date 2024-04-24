@@ -25,9 +25,9 @@ function BadgerLoginScreen(props) {
             onChangeText={setPassword}
         />
 
-        {props.showLoginError && <Text style={{color:"crimson", marginBottom:12}}>Incorrect login, please try again.</Text>}
+        {props.showLoginError && <Text style={{color:"darkred", marginBottom:12}}>Incorrect login, please try again.</Text>}
 
-        <Button color="crimson" title="Login" onPress={() => {
+        <Button color="darkred" title="Login" onPress={() => {
             props.handleLogin(username, password);
         }} />
         <Text style={{margin:20}}>New here?</Text>

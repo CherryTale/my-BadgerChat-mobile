@@ -97,12 +97,12 @@ function BadgerChatroomScreen(props) {
             keyExtractor={item => item.id}
             onRefresh={loadMessages}
             refreshing={isLoading}
-            style={{paddingTop:8,paddingBottom:8}}
+            style={{paddingTop:8}}
             ref={flatListRef}
         />
         {!(props.continueAsGuest) &&
-            <Pressable onPress={() => setModalVisible(true)} style={styles.container}>
-                <Text style={styles.button}>ADD POST</Text>
+            <Pressable onPress={() => setModalVisible(true)}>
+                <Text style={styles.addButton}>ADD POST</Text>
             </Pressable>
         }
         <Modal
@@ -113,23 +113,24 @@ function BadgerChatroomScreen(props) {
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text>Create A Post</Text>
-                    <Text>Title</Text>
+                    <Text style={{fontSize:20,fontWeight:"bold", marginBottom:12}}>Create A Post</Text>
+                    <Text style={{fontSize:16}}>Title</Text>
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input,{height:40}]}
                         autoCapitalize="none"
                         value={title}
                         onChangeText={setTitle}
                     />
-                    <Text>Body</Text>
+                    <Text style={{fontSize:16}}>Body</Text>
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input,{height:80}]}
                         autoCapitalize="none"
                         value={content}
                         onChangeText={setContent}
+                        multiline
                     />
-                    <View style={{flexDirection:"row"}}>
-                        <Button color="crimson" title="CREATE POST" onPress={() => handlePostSubmit()} disabled={title === "" || content === ""} />
+                    <View style={{flexDirection:"row",justifyContent:"center"}}>
+                        <Button color="darkred" title="CREATE POST" onPress={() => handlePostSubmit()} disabled={title === "" || content === ""} />
                         <Text> </Text>
                         <Button color="grey" title="CANCEL" onPress={() => setModalVisible(false)} />
                     </View>
@@ -140,29 +141,26 @@ function BadgerChatroomScreen(props) {
 }
 
 const styles = StyleSheet.create({
-    container :{
-        alignItems: "center",
-        flexGrow: 1,
-    },
-    button: {
+    addButton: {
+        width: "100%",
         height: 40,
+        lineHeight: 40,
         color: "white",
         fontWeight: "bold",
-        backgroundColor: "crimson",
-        padding: 10,
+        backgroundColor: "darkred",
+        textAlign: "center",
+        verticalAlign: "middle"
     },
     centeredView: {
+        backgroundColor: 'rgba(0,0,0,0.5)',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 22,
     },
     modalView: {
-        margin: 20,
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 35,
-        alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -173,7 +171,6 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     input: {
-        height: 40,
         width: 200,
         margin: 12,
         borderWidth: 1,

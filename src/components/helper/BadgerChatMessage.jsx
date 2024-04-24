@@ -46,23 +46,26 @@ function BadgerChatMessage(props) {
         <Text></Text>
         <Text>{props.content}</Text>
         {props.poster === loginUsername &&
-            <Pressable onPress={handlePostDelete} style={styles.container}>
-                <Text style={styles.button}>DELETE POST</Text>
+            <Pressable onPress={handlePostDelete}>
+                <Text style={styles.deleteButton}>DELETE POST</Text>
             </Pressable>
         }
     </BadgerCard>
 }
 
 const styles = StyleSheet.create({
-    container :{
-        alignItems: "center",
-    },
-    button: {
+    deleteButton: {
+        width: "100%",
         height: 40,
+        lineHeight: 40,
         color: "white",
         fontWeight: "bold",
         backgroundColor: "crimson",
-    }
+        textAlign: "center",
+        verticalAlign: "middle",
+        borderRadius: 6,
+        marginTop: 4,
+    },
 });
 
 export default BadgerChatMessage;

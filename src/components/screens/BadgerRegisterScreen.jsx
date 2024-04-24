@@ -35,10 +35,10 @@ function BadgerRegisterScreen(props) {
             onChangeText={setRepeatPassword}
         />
         
-        {props.showRegisterError && <Text style={{color:"crimson", marginBottom:12}}>{props.registerError}</Text>}
+        {props.showRegisterError && <Text style={{color:"darkred", marginBottom:12}}>{props.registerError}</Text>}
 
         <View style={{flexDirection:"row"}}>
-            <Button color="crimson" title="Signup" onPress={() => props.handleSignup(username, password, repeatPassword)} />
+            <Button color="darkred" title="Signup" onPress={() => props.handleSignup(username, password, repeatPassword)} />
             <Text> </Text>
             <Button color="grey" title="Nevermind!" onPress={() => props.setIsRegistering(false)} />
         </View>

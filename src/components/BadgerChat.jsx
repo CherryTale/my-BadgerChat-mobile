@@ -123,7 +123,13 @@ export default function App() {
   return <BadgerLoginStatusContext.Provider value={[loginUsername,setLoginUsername]}>{
     isLoggedIn || continueAsGuest ?
       <NavigationContainer>
-        <ChatDrawer.Navigator>
+        <ChatDrawer.Navigator
+          screenOptions={({route}) => {
+            if(route.name==="Logout"||route.name==="Signup"){
+              return {drawerActiveTintColor: "red"};
+            }
+          }}
+        >
           <ChatDrawer.Screen name="Landing" component={BadgerLandingScreen} />
           {
             chatrooms.map(chatroom => {
