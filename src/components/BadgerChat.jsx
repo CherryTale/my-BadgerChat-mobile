@@ -8,6 +8,9 @@ import BadgerChatroomScreen from './screens/BadgerChatroomScreen';
 import BadgerRegisterScreen from './screens/BadgerRegisterScreen';
 import BadgerLoginScreen from './screens/BadgerLoginScreen';
 import BadgerLandingScreen from './screens/BadgerLandingScreen';
+import BadgerLogoutScreen from './screens/BadgerLogoutScreen';
+import BadgerConversionScreen from './screens/BadgerConversionScreen';
+import BadgerLoginStatusContext from './contexts/BadgerLoginStatusContext'
 
 
 const ChatDrawer = createDrawerNavigator();
@@ -20,24 +23,25 @@ export default function App() {
   const [showLoginError, setShowLoginError] = useState(false);
   const [showRegisterError, setShowRegisterError] = useState(false);
   const [registerError, setRegisterError] = useState("");
+  const [loginUsername, setLoginUsername] = useState("");
+  const [continueAsGuest, setContinueAsGuest] = useState(false);
 
   useEffect(() => {
-    // hmm... maybe I should load the chatroom names here
-    setChatrooms(["Hello", "World"]) // for example purposes only!
-  }, []);
-
-  async function getToken() {
-    try {
-      const token = await SecureStore.getItemAsync('jwtToken');
-      if (token) {
-        return token;
-      } else {
-        throw new Error('JWT token not found.')
+    async function loadChatrooms() {
+      try {
+        const response = await fetch('https://cs571.org/api/s24/hw9/chatrooms', {
+          headers: {
+            "X-CS571-ID": CS571.getBadgerId(),
+          }
+        })
+        const json = await response.json();
+        setChatrooms(json);
+      } catch (error) {
+        console.error("GETROOMS ERROR: ", error);
       }
-    } catch (error) {
-      console.error('Failed to retrieve JWT token:', error);
     }
-  }
+    loadChatrooms();
+  }, []);
 
   async function handleLogin(username, password) {
     if (username === "" || password === ""){
@@ -56,15 +60,16 @@ export default function App() {
           })
         })
         const json = await response.json();
-        console.log(json.msg);
 
-        if(response.status!==200){
-          setShowLoginError(true);
-        }else{
+        if(response.status === 200){
+          console.log(json.msg);
           await SecureStore.setItemAsync('jwtToken', json.token);
-          await SecureStore.setItemAsync('username', json.user.username);
+          setLoginUsername(json.user.username);
           setIsLoggedIn(true);
           setShowLoginError(false);
+        }else{
+          setShowLoginError(true);
+          throw new Error(json.msg);
         }
       } catch (error) {
         console.error("LOGIN ERROR: ", error);
@@ -96,16 +101,18 @@ export default function App() {
           })
         })
         const json = await response.json();
-        console.log(json.msg);
 
         if(response.status === 200){
+          console.log(json.msg);
           await SecureStore.setItemAsync('jwtToken', json.token);
-          await SecureStore.setItemAsync('username', json.user.username);
+          setLoginUsername(json.user.username);
           setIsLoggedIn(true);
+          setRegisterError("");
           setShowRegisterError(false);
         }else{
           setRegisterError(json.msg);
           setShowRegisterError(true);
+          throw new Error(json.msg);
         }
       } catch (error) {
         console.error("SIGNUP ERROR: ", error);
@@ -113,24 +120,42 @@ export default function App() {
     }
   }
 
-  if (isLoggedIn) {
-    return (
+  return <BadgerLoginStatusContext.Provider value={[loginUsername,setLoginUsername]}>{
+    isLoggedIn || continueAsGuest ?
       <NavigationContainer>
         <ChatDrawer.Navigator>
           <ChatDrawer.Screen name="Landing" component={BadgerLandingScreen} />
           {
             chatrooms.map(chatroom => {
               return <ChatDrawer.Screen key={chatroom} name={chatroom}>
-                {(props) => <BadgerChatroomScreen name={chatroom} />}
+                {(props) => <BadgerChatroomScreen name={chatroom} continueAsGuest={continueAsGuest} />}
               </ChatDrawer.Screen>
             })
           }
+          {loginUsername !== "" ?
+            <ChatDrawer.Screen name="Logout">
+              {(props) => <BadgerLogoutScreen setIsLoggedIn={setIsLoggedIn} />}
+            </ChatDrawer.Screen>
+          :
+            <ChatDrawer.Screen name="Signup">
+              {(props) => <BadgerConversionScreen setContinueAsGuest={setContinueAsGuest} setIsRegistering={setIsRegistering} />}
+            </ChatDrawer.Screen>
+          }
         </ChatDrawer.Navigator>
       </NavigationContainer>
-    );
-  } else if (isRegistering) {
-    return <BadgerRegisterScreen handleSignup={handleSignup} setIsRegistering={setIsRegistering} showRegisterError={showRegisterError} registerError={registerError} />
-  } else {
-    return <BadgerLoginScreen handleLogin={handleLogin} setIsRegistering={setIsRegistering} showLoginError={showLoginError} />
-  }
+    : isRegistering ?
+      <BadgerRegisterScreen
+        handleSignup={handleSignup}
+        setIsRegistering={setIsRegistering}
+        showRegisterError={showRegisterError}
+        registerError={registerError}
+      />
+    :
+      <BadgerLoginScreen
+        handleLogin={handleLogin}
+        setIsRegistering={setIsRegistering}
+        showLoginError={showLoginError}
+        setContinueAsGuest={setContinueAsGuest}
+      />
+  }</BadgerLoginStatusContext.Provider>
 }

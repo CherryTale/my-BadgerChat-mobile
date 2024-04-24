@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 
 function BadgerRegisterScreen(props) {
     const [username, setUsername] = useState("");
@@ -35,7 +35,7 @@ function BadgerRegisterScreen(props) {
             onChangeText={setRepeatPassword}
         />
         
-        {props.showRegisterError && <Text style={{color:"red", marginBottom:12}}>{props.registerError}</Text>}
+        {props.showRegisterError && <Text style={{color:"crimson", marginBottom:12}}>{props.registerError}</Text>}
 
         <View style={{flexDirection:"row"}}>
             <Button color="crimson" title="Signup" onPress={() => props.handleSignup(username, password, repeatPassword)} />

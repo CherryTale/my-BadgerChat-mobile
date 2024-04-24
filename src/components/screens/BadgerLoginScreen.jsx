@@ -25,13 +25,18 @@ function BadgerLoginScreen(props) {
             onChangeText={setPassword}
         />
 
-        {props.showLoginError && <Text style={{color:"red", marginBottom:12}}>Incorrect login, please try again.</Text>}
+        {props.showLoginError && <Text style={{color:"crimson", marginBottom:12}}>Incorrect login, please try again.</Text>}
 
         <Button color="crimson" title="Login" onPress={() => {
             props.handleLogin(username, password);
         }} />
         <Text style={{margin:20}}>New here?</Text>
-        <Button color="grey" title="Signup" onPress={() => props.setIsRegistering(true)} />
+
+        <View style={{flexDirection:"row"}}>
+            <Button color="grey" title="Signup" onPress={() => props.setIsRegistering(true)} />
+            <Text> </Text>
+            <Button color="grey" title="CONTINUE AS GUEST" onPress={() => props.setContinueAsGuest(true)} />
+        </View>
     </View>;
 }
 

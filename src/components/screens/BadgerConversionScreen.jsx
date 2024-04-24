@@ -1,4 +1,4 @@
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 
 function BadgerConversionScreen(props) {
 
@@ -6,8 +6,14 @@ function BadgerConversionScreen(props) {
         <Text style={{fontSize: 24, marginTop: -100}}>Ready to signup?</Text>
         <Text>Join BadgerChat to be able to make posts!</Text>
         <Text/>
-        <Button title="Signup!" color="darkred" onPress={() => Alert.alert("Hmmm...", "This should do something!")}/>
-
+        <Button
+            title="Signup!"
+            color="darkred"
+            onPress={() => {
+                props.setContinueAsGuest(false);
+                props.setIsRegistering(true);
+            }}
+        />
     </View>
 }
 

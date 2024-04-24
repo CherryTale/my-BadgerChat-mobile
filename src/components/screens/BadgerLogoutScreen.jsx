@@ -1,12 +1,28 @@
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
+import { useContext } from "react";
+import { Button, StyleSheet, Text, View } from "react-native";
+
+import * as SecureStore from 'expo-secure-store';
+import BadgerLoginStatusContext from "../contexts/BadgerLoginStatusContext";
 
 function BadgerLogoutScreen(props) {
+
+    const [loginUsername, setLoginUsername] = useContext(BadgerLoginStatusContext);
+
+    async function logout() {
+        try {
+            await SecureStore.deleteItemAsync('jwtToken');
+            setLoginUsername("");
+            props.setIsLoggedIn(false);
+        } catch (error) {
+            console.error("LOGOUT ERROR: ", error);
+        }
+    }
 
     return <View style={styles.container}>
         <Text style={{fontSize: 24, marginTop: -100}}>Are you sure you're done?</Text>
         <Text>Come back soon!</Text>
         <Text/>
-        <Button title="Logout" color="darkred" onPress={() => Alert.alert("Hmmm...", "This should do something!")}/>
+        <Button title="Logout" color="darkred" onPress={logout} />
 
     </View>
 }
