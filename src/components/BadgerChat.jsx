@@ -140,7 +140,7 @@ export default function App() {
           }
           {loginUsername !== "" ?
             <ChatDrawer.Screen name="Logout">
-              {(props) => <BadgerLogoutScreen setIsLoggedIn={setIsLoggedIn} />}
+              {(props) => <BadgerLogoutScreen setIsLoggedIn={setIsLoggedIn} setIsRegistering={setIsRegistering} />}
             </ChatDrawer.Screen>
           :
             <ChatDrawer.Screen name="Signup">

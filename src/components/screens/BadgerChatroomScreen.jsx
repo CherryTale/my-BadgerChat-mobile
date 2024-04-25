@@ -123,7 +123,7 @@ function BadgerChatroomScreen(props) {
                     />
                     <Text style={{fontSize:16}}>Body</Text>
                     <TextInput
-                        style={[styles.input,{height:80}]}
+                        style={[styles.input,{height:80,textAlignVertical:"top"}]}
                         autoCapitalize="none"
                         value={content}
                         onChangeText={setContent}

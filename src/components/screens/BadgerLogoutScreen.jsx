@@ -13,6 +13,7 @@ function BadgerLogoutScreen(props) {
             await SecureStore.deleteItemAsync('jwtToken');
             setLoginUsername("");
             props.setIsLoggedIn(false);
+            props.setIsRegistering(false);
         } catch (error) {
             console.error("LOGOUT ERROR: ", error);
         }
